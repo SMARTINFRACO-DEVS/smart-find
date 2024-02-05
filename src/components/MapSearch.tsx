@@ -2,15 +2,21 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import MapComponent from './MapComponent';
+import OrderForms from './OrderForms';
 
 const MapSearch: React.FC = () => {
   const [apiKey, setApiKey] = useState('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
-  // const [mycoordinates, setMyCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  
+  const [Severcoordinates, setSeverCoordinates] = useState<{ lat: number; lng: number } | null>({
+    lat: 0,
+    lng: 0,
+  });
+  
+
   const [connectivityStatus, setConnectivityStatus] = useState<string>(''); // Initialize the state
 
-  
   const fetchData = async () => {
     try {
       const response = await fetch('http://localhost:3005/api/data');
@@ -21,10 +27,13 @@ const MapSearch: React.FC = () => {
       console.error(error);
     }
   };
-
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    console.log('Severcoordinates updated:', Severcoordinates);
+  }, [Severcoordinates]);
 
   const handleSearch = async () => {
     try {
@@ -44,8 +53,15 @@ const MapSearch: React.FC = () => {
         clientlongitude: location.lng,
       });
 
-      // Set the response in state
+
+
+      const { nLat, nLng } = postResponse.data.coordinates;
       setConnectivityStatus(postResponse.data.message);
+      setSeverCoordinates({ lat: nLat, lng: nLng });
+      console.log('Coordinates from API response:', nLat, nLng);
+      console.log('Severcoordinates after state update:', Severcoordinates);
+      console.log('API response data:', postResponse.data);
+
     } catch (error) {
       console.error('Error:', error);
     }
@@ -76,12 +92,13 @@ const MapSearch: React.FC = () => {
 
       {coordinates && (
         <div>
-          <p className=' py-3'>Coordinates: {coordinates.lat}, {coordinates.lng}</p>
+          <p className=' py-3'>Coordinates: {coordinates.lat}, {coordinates.lng}, {Severcoordinates.lat}, {Severcoordinates.lng} </p>
           <MapComponent coordinates={coordinates} />
         </div>
       )}
-
-     
+          <div hidden>
+            <OrderForms coordinates={Severcoordinates} />
+          </div>
     </div>
   );
 };
