@@ -1,13 +1,17 @@
-import  { useState } from 'react';
+import  { useState, useEffect } from 'react';
 
-const OrderForms = () => {
+interface OrderFormsProps {
+  coordinates: { lat: number; lng: number } | null;
+}
+
+const OrderForms: React.FC<OrderFormsProps> = ({ coordinates }) => {
+
   const [formData, setFormData] = useState({
     fullName: '',
     contact: '',
-    address: '',
-    searchResults: '',
-    clientlatitude: '',
-    clientlongitude: '',
+    email: '',
+    clientlatitude: coordinates?.lat ?? 0,
+    clientlongitude: coordinates?.lng ?? 0,
   });
 
   const handleSubmit = async () => {
@@ -39,6 +43,15 @@ const OrderForms = () => {
     }));
   };
 
+  useEffect(() => {
+    // Update form data when coordinates prop changes
+    setFormData((prevData) => ({
+      ...prevData,
+      clientlatitude: coordinates?.lat ?? 0,
+      clientlongitude: coordinates?.lng ?? 0,
+    }));
+  }, [coordinates]);
+
   return (
     <div className="flex items-center justify-center h-screen  bg-gray-100">
       <div className="bg-white p-8 rounded-md shadow-md w-1/4">
@@ -67,28 +80,19 @@ const OrderForms = () => {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm font-medium  text-gray-700">Address:</label>
+            <label className="block text-sm font-medium  text-gray-700">Email:</label>
             <input
               type="text"
-              name="address"
-              value={formData.address}
+              name="email"
+              value={formData.email}
               onChange={handleChange}
               className="mt-1 p-2 w-full border rounded-md bg-transparent"
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Search Results:</label>
-            <input
-              type="text"
-              name="searchResults"
-              value={formData.searchResults}
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border  bg-transparent rounded-md"
-            />
-          </div>
+          
 
-          <div className="mb-4">
+          <div className="mb-4" hidden>
             <label className="block text-sm font-medium text-gray-700">Client Latitude:</label>
             <input
               type="text"
@@ -99,8 +103,8 @@ const OrderForms = () => {
             />
           </div>
 
-          <div className="mb-4">
-            <label className="block text-sm font-medium text-gray-700">Client Longitude:</label>
+          <div className="mb-4" hidden>
+            <label className="block text-sm font-medium text-gray-700" >Client Longitude:</label>
             <input
               type="text"
               name="clientlongitude"
