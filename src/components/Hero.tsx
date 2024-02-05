@@ -22,7 +22,9 @@ const Hero = () => {
         <div className="flex-grow flex flex-col justify-center items-center max-w-full bg-opacity-40 p-8 text-white">
           <motion.div variants={containerVariants} initial="hidden" animate="visible">
             <div className="text-center mx-auto">
-              <motion.h1 className="text-6xl font-semibold" variants={containerVariants}>
+              <motion.h1 className="text-6xl font-semibold" 
+                animate={{ x: [null, 100, 0] }}
+              variants={containerVariants}>
                 Welcome to Smart Find!
               </motion.h1>
               <motion.p className="font-light text-3xl mt-5" variants={containerVariants}>
@@ -41,16 +43,27 @@ const Hero = () => {
       </div>
 
     <motion.section
-      className="min-h-screen bg-slate-800 bg-center bg-cover bg-blend-over bg-slate/30 relative overflow-hidden"
+      className="min-h-screen bg-slate-800 text-white bg-center bg-cover bg-blend-overlay bg-fixed bg-black/30 relative overflow-hidden"
       style={{ backgroundImage: `url(${bg2})` }}
     >
       <motion.div
         variants={buttonVariants}
-        initial="hidden"
-        animate="visible"
-        className="absolute inset-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center mx-auto"
+        
+        className="flex justify-center items-center mt-64 "
       >
-        <motion.h1 className="text-3xl text-white font-semibold">Service that brings a smile to your face</motion.h1>
+        <div className="flex-grow flex flex-col justify-center items-center max-w-full bg-opacity-30 p-8 text-white">
+          <motion.div variants={containerVariants} initial="hidden" animate="visible">
+            <div className="text-center mx-auto">
+              <motion.h1 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              className="text-6xl font-semibold" variants={containerVariants}>
+                Service that leaves a smile on your face
+              </motion.h1>
+              
+            </div>
+          </motion.div>
+        </div>
       </motion.div>
     </motion.section>
     </>

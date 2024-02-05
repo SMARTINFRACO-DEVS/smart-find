@@ -7,8 +7,8 @@ const MapSearch: React.FC = () => {
   const [apiKey, setApiKey] = useState('');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
+  // const [mycoordinates, setMyCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [connectivityStatus, setConnectivityStatus] = useState<string>(''); // Initialize the state
-
 
   
   const fetchData = async () => {
