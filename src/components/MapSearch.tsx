@@ -32,40 +32,51 @@ const MapSearch: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    console.log('updated:', connectivityStatus);
+  }, [connectivityStatus, ]);
+
+  useEffect(() => {
     console.log('Severcoordinates updated:', Severcoordinates);
   }, [Severcoordinates]);
 
   const handleSearch = async () => {
     try {
+      // Reset connectivityStatus state
+      setConnectivityStatus('');
+  
       const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
         params: {
           address: searchQuery,
           key: apiKey,
         },
       });
-
+  
       const location = response.data.results[0].geometry.location;
       setCoordinates({ lat: location.lat, lng: location.lng });
-
+  
       // Make a POST request to your server
       const postResponse = await axios.post('http://localhost:3005/checkConnectivity', {
         clientlatitude: location.lat,
         clientlongitude: location.lng,
       });
-
-
-
-      const { nLat, nLng } = postResponse.data.coordinates;
-      setConnectivityStatus(postResponse.data.message);
-      setSeverCoordinates({ lat: nLat, lng: nLng });
-      console.log('Coordinates from API response:', nLat, nLng);
-      console.log('Severcoordinates after state update:', Severcoordinates);
+  
+      const { message, coordinates } = postResponse.data;
+      setConnectivityStatus(message);
+      if (coordinates) {
+        const { nLat, nLng } = coordinates;
+        setSeverCoordinates({ lat: nLat, lng: nLng });
+        console.log('Coordinates from API response:', nLat, nLng);
+      }
+  
       console.log('API response data:', postResponse.data);
-
+  
     } catch (error) {
       console.error('Error:', error);
+      // Reset connectivityStatus state in case of error
+      setConnectivityStatus('Error');
     }
   };
+  
 
   return (
     <div className="container mx-auto p-4 ">
