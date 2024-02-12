@@ -1,28 +1,47 @@
-import  { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 interface OrderFormsProps {
   coordinates: { lat: number; lng: number } | null;
 }
 
 const OrderForms: React.FC<OrderFormsProps> = ({ coordinates }) => {
+  const towerLat = coordinates.lat
+  const towerLng = coordinates.lng
 
   const [formData, setFormData] = useState({
     fullName: '',
     contact: '',
     email: '',
-    clientlatitude: coordinates?.lat ?? 0,
-    clientlongitude: coordinates?.lng ?? 0,
+    clientlatitude: towerLat, 
+    clientlongitude: towerLng, 
   });
+
+  
+
+  
+
+  // Update form data when coordinates prop changes
+  useEffect(() => {
+    if (coordinates) {
+      setFormData(prevData => ({
+        ...prevData,
+        clientlatitude: towerLng,
+        clientlongitude: towerLng,
+      }));
+    }
+  }, [coordinates]);
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch('/submitForm', {
+      
+      const response = await fetch('http://localhost:3005/submitForm', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(formData),
       });
+      console.log('Form data:', formData)
 
       if (response.ok) {
         const data = await response.json();
@@ -43,20 +62,13 @@ const OrderForms: React.FC<OrderFormsProps> = ({ coordinates }) => {
     }));
   };
 
-  useEffect(() => {
-    // Update form data when coordinates prop changes
-    setFormData((prevData) => ({
-      ...prevData,
-      clientlatitude: coordinates?.lat ?? 0,
-      clientlongitude: coordinates?.lng ?? 0,
-    }));
-  }, [coordinates]);
-
   return (
     <div className="flex items-center justify-center h-screen  bg-gray-100">
       <div className="bg-white p-8 rounded-md shadow-md w-1/4">
         <h2 className="text-2xl font-semibold mb-6">Order Form</h2>
         <form>
+          {/* Form fields */}
+
           <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Full Name:</label>
             <input
@@ -92,7 +104,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ coordinates }) => {
 
           
 
-          <div className="mb-4" hidden>
+          <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700">Client Latitude:</label>
             <input
               type="text"
@@ -103,7 +115,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ coordinates }) => {
             />
           </div>
 
-          <div className="mb-4" hidden>
+          <div className="mb-4">
             <label className="block text-sm font-medium text-gray-700" >Client Longitude:</label>
             <input
               type="text"
@@ -113,6 +125,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ coordinates }) => {
               className="mt-1 p-2 w-full border  bg-transparent rounded-md"
             />
           </div>
+
 
           <button
             type="button"

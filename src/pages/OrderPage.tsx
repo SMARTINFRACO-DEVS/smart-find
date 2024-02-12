@@ -4,7 +4,10 @@ import OrderForms from "../components/OrderForms"
 
 const OrderPage = () => {
   return (
-    <OrderForms/>
+    <OrderForms coordinates={{
+      lat: 0,
+      lng: 0
+    }}/>
   )
 }
 
