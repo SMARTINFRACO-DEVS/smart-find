@@ -1,14 +1,21 @@
-// import React from 'react'
-
-import OrderForms from "../components/OrderForms"
-
-const OrderPage = () => {
-  return (
-    <OrderForms coordinates={{
-      lat: 0,
-      lng: 0
-    }}/>
-  )
+// Define the interface for props in OrderForms component
+interface OrderFormsProps {
+  coordinates: {
+    lat: number;
+    lng: number;
+  };
 }
 
-export default OrderPage
+// Now, you can use the OrderFormsProps interface in your component
+import React from 'react';
+import OrderForms from '../components/OrderForms';
+
+const OrderPage: React.FC = () => {
+  return (
+    <OrderForms  
+    initialCoordinates={{ lat: 0, lng: 0 }} 
+    />
+  );
+};
+
+export default OrderPage;

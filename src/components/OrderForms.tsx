@@ -42,24 +42,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ initialCoordinates }) => {
     }));
   };
 
-  // const handleLocationClick = async () => {
-  //   if (navigator.geolocation) {
-  //     navigator.geolocation.getCurrentPosition(async (position) => {
-  //       const { latitude, longitude } = position.coords;
-  //       const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latitude},${longitude}&key=YOUR_API_KEY`);
-  //       const data = await response.json();
-  //       const address = data.results[0].formatted_address;
-  //       setFormData(prevData => ({
-  //         ...prevData,
-  //         location: { latitude, longitude },
-  //       }));
-  //     }, (error) => {
-  //       console.error(error);
-  //     });
-  //   } else {
-  //     console.error("Geolocation is not supported by this browser.");
-  //   }
-  // };
+
 
   const getLocation = async () => {
     if (navigator.geolocation) {
