@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FaLocationPin } from 'react-icons/fa6';
+import { useNavigate } from 'react-router-dom';
 
 interface OrderFormsProps {
   initialCoordinates: { lat: number; lng: number } | null; // Initial coordinates from the server
@@ -19,10 +20,11 @@ const OrderForms: React.FC<OrderFormsProps> = ({ initialCoordinates }) => {
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [apiKey, setApiKey] = useState('');
   const [myLocation, setMyLocation] = useState<{ lat: number; lng: number } | null>(null);
-  
+  const navigate = useNavigate();
+
   const fetchData = async () => {
     try {
-      const response = await fetch('http://10.247.5.180/api/data');
+      const response = await fetch('http://10.247.5.180:81/smartfind/backend/api/data');
       const data = await response.json();
       setApiKey(data.apiKey);
     } catch (error) {
@@ -72,7 +74,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ initialCoordinates }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
     try {
-      const response = await fetch('http://10.247.5.180/submitForm', {
+      const response = await fetch('http://10.247.5.180:81/smartfind/backend/submitForm', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -84,6 +86,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ initialCoordinates }) => {
       if (response.ok) {
         const data = await response.json();
         console.log(data);
+        navigate('/')
       } else {
         console.error('Form submission failed');
       }
