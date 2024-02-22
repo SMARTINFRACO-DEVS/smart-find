@@ -14,7 +14,7 @@ const MapSearch: React.FC = () => {
   
   const fetchData = async () => {
     try {
-      const response = await fetch('localhost:3005/api/data');
+      const response = await fetch('http://localhost:3005/api/data');
       const data = await response.json();
       setApiKey(data.apiKey);
     } catch (error) {
@@ -27,8 +27,9 @@ const MapSearch: React.FC = () => {
   }, []);
 
   const handleSearch = async () => {
-    if (!searchQuery || loading) return; // Avoid making unnecessary calls
+    if (!searchQuery || loading) return;
     setLoading(true);
+  
     try {
       const response = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
         params: {
@@ -36,9 +37,16 @@ const MapSearch: React.FC = () => {
           key: apiKey,
         },
       });
-      const location = response.data.results[0].geometry.location;
-      setCoordinates({ lat: location.lat, lng: location.lng });
-      await checkConnectivity(location.lat, location.lng);
+  
+      const location = response.data.results?.[0]?.geometry.location;
+  
+      if (location) {
+        setCoordinates({ lat: location.lat, lng: location.lng });
+        await checkConnectivity(location.lat, location.lng);
+      } else {
+        console.error('Error: Location not found in response');
+        // Handle case where location is not found
+      }
     } catch (error) {
       console.error('Error:', error);
       setConnectivityStatus('Error');
@@ -46,9 +54,10 @@ const MapSearch: React.FC = () => {
       setLoading(false);
     }
   };
+  
 
   const checkConnectivity = async (lat: number, lng: number) => {
-    const postResponse = await axios.post('localhost:3005/checkConnectivity', {
+    const postResponse = await axios.post('http://localhost:3005/checkConnectivity', {
       clientlatitude: lat,
       clientlongitude: lng,
     });
