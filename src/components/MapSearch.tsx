@@ -14,7 +14,7 @@ const MapSearch: React.FC = () => {
   
   const fetchData = async () => {
     try {
-      const response = await fetch('localhost:3005/api/data');
+      const response = await fetch('http://localhost:3005/api/data');
       const data = await response.json();
       setApiKey(data.apiKey);
     } catch (error) {
@@ -48,12 +48,13 @@ const MapSearch: React.FC = () => {
   };
 
   const checkConnectivity = async (lat: number, lng: number) => {
-    const postResponse = await axios.post('localhost:3005/checkConnectivity', {
+    const postResponse = await axios.post('http://localhost:3005/checkConnectivity', {
       clientlatitude: lat,
       clientlongitude: lng,
     });
     const { message } = postResponse.data;
     setConnectivityStatus(message);
+    console.log(message)
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -101,7 +102,7 @@ const MapSearch: React.FC = () => {
         </button>
       </div>
 
-      {searchInitiated && connectivityStatus && (
+      {searchInitiated || connectivityStatus && (
         <div>
           <p className={`py-3 ${connectivityStatus === "Network is Available" ? "text-green-500 text-xl block font-bold uppercase" : "text-red-500 text-xl font-bold block uppercase"}`}>
             {connectivityStatus}

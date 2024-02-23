@@ -24,7 +24,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ initialCoordinates }) => {
 
   const fetchData = async () => {
     try {
-      const response = await fetch('http://10.247.5.180:81/smartfind/backend/api/data');
+      const response = await fetch('http://localhost:3005/api/data');
       const data = await response.json();
       setApiKey(data.apiKey);
     } catch (error) {
@@ -74,7 +74,7 @@ const OrderForms: React.FC<OrderFormsProps> = ({ initialCoordinates }) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault(); // Prevent default form submission behavior
     try {
-      const response = await fetch('http://10.247.5.180:81/smartfind/backend/submitForm', {
+      const response = await fetch('http://localhost:3005/submitForm', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
